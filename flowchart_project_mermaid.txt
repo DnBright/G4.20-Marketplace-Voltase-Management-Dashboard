@@ -1,0 +1,43 @@
+flowchart TD
+    %% Simbol Standar Mermaid:
+    %% ([Terminator]) - Start/End
+    %% [/Input-Output/] - Data entry/output
+    %% [Process] - Task/Action
+    %% {Decision} - Logic choice
+    %% [(Database)] - Storage
+
+    Start([Mulai]) --> InputData[/Dataset filtered_products.csv/]
+    InputData --> Cleaning[Proses Cleaning & Mapping via PHP Seeder]
+    Cleaning --> DB[(Database MySQL)]
+    
+    DB --> Choice{Pilih Jenis Analisis?}
+    
+    %% Alur AI
+    Choice -- "Trend Market (AI)" --> AIMatrix[Bangun User-Item Matrix]
+    AIMatrix --> Cosine[Hitung Cosine Similarity]
+    Cosine --> AIResult[/Output: Global Trending Products/]
+    
+    %% Alur Statistik
+    Choice -- "Statistik Penjualan" --> Aggregator[Agregasi Data Pendapatan & Kategori]
+    Aggregator --> Charts[Render Chart.js Dashboard]
+    Charts --> StatResult[/Output: Visualisasi Grafik Interaktif/]
+
+    AIResult --> Dashboard[/Tampilan Command Center Dashboard/]
+    StatResult --> Dashboard
+    
+    Dashboard --> Selesai([Selesai])
+
+    %% Styling untuk estetika sesuai Gambar Referensi
+    style Start fill:#f9f,stroke:#333,stroke-width:2px
+    style Selesai fill:#f9f,stroke:#333,stroke-width:2px
+    style InputData fill:#bbf,stroke:#333,stroke-width:2px
+    style AIResult fill:#bbf,stroke:#333,stroke-width:2px
+    style StatResult fill:#bbf,stroke:#333,stroke-width:2px
+    style Dashboard fill:#bbf,stroke:#333,stroke-width:2px
+    style Cleaning fill:#ff9,stroke:#333,stroke-width:2px
+    style AIMatrix fill:#ff9,stroke:#333,stroke-width:2px
+    style Cosine fill:#ff9,stroke:#333,stroke-width:2px
+    style Aggregator fill:#ff9,stroke:#333,stroke-width:2px
+    style Charts fill:#ff9,stroke:#333,stroke-width:2px
+    style Choice fill:#f96,stroke:#333,stroke-width:2px
+    style DB fill:#9f9,stroke:#333,stroke-width:2px

@@ -1,0 +1,26 @@
+﻿
+  GET|HEAD        / 
+  POST            _boost/browser-logs ΓÇª
+  GET|HEAD        dashboard buyer.dashboard ΓÇ║ BuyerControlΓÇª
+  GET|HEAD        dashboard-admin admin.dashboard ΓÇ║ ProductContrΓÇª
+  GET|HEAD        dashboard-admin/login admin.login ΓÇ║ AdminAutΓÇª
+  POST            dashboard-admin/login admin.login.post ΓÇ║ AdmiΓÇª
+  POST            dashboard-admin/logout admin.logout ΓÇ║ AdmiΓÇª
+  POST            dashboard-admin/products admin.products.store  ΓÇª
+  GET|HEAD        dashboard-admin/products/create admin.products.crΓÇª
+  PUT|PATCH       dashboard-admin/products/{product} admin.productsΓÇª
+  DELETE          dashboard-admin/products/{product} admin.products.dΓÇª
+  GET|HEAD        dashboard-admin/products/{product}/edit adminΓÇª
+  GET|HEAD        login login ΓÇ║ AuthController@showΓÇª
+  POST            login login.post ΓÇ║ AuthController@ΓÇª
+  POST            logout logout ΓÇ║ AuthController@ΓÇª
+  GET|HEAD        materi materi ΓÇ║ MateriControllerΓÇª
+  GET|HEAD        payment/checkout/{product} payment.checkout ΓÇ║ ΓÇª
+  GET|HEAD        product/{product} product.show ΓÇ║ ProduΓÇª
+  GET|HEAD        register register ΓÇ║ AuthController@showΓÇª
+  POST            register register.post ΓÇ║ AuthController@ΓÇª
+  GET|HEAD        storage/{path} ΓÇª
+  GET|HEAD        up 
+
+ Showing [22] routes
+

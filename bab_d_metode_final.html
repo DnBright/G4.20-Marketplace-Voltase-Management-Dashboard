@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bab D: Metode dan Teknik</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-top: 30px;
+            border-left: 5px solid #2980b9;
+            padding-left: 10px;
+        }
+
+        h3 {
+            color: #34495e;
+            margin-top: 25px;
+            font-weight: bold;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul {
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-left: 5px solid #27ae60;
+            padding: 15px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+            margin: 15px 0;
+            border-radius: 4px;
+            color: #2c3e50;
+        }
+
+        .rationale-box {
+            background-color: #eaf2f8;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #d6eaf8;
+            margin: 15px 0;
+        }
+
+        .rationale-title {
+            font-weight: bold;
+            color: #2980b9;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        strong {
+            color: #2c3e50;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Bab D: Metode/Teknik yang Digunakan</h1>
+
+    <p>Pada bab ini, dijelaskan secara rinci metode transformasi data yang diterapkan. Fokus utama adalah pada teknik
+        <strong>Python Pre-processing</strong> yang digunakan untuk membersihkan data mentah *marketplace* menjadi
+        dataset berkualitas tinggi.</p>
+
+    <h2>1. Landasan Teknik & Pemrosesan Data</h2>
+    <p>Data mentah dari hasil <em>scraping</em> memiliki karakteristik yang tidak terstruktur (*unstructured*). Untuk
+        mengatasi hal ini, dikembangkan algoritma filtering berbasis Python dengan tiga komponen utama:</p>
+
+    <h3>A. Ekstraksi Spesifikasi Teknis (Regex)</h3>
+
+    <div class="rationale-box">
+        <span class="rationale-title">Landasan Pemilihan Teknik (Rationale):</span>
+        Penggunaan <em>Regular Expressions (Regex)</em> dipilih karena spesifikasi teknis seperti Watt dan Ampere
+        memiliki pola karakter yang pasti namun posisinya acak dalam teks judul. Metode ini jauh lebih akurat daripada
+        pencarian kata kunci biasa (*keyword search*) yang sering gagal membedakan variasi penulisan (seperti "30W" vs
+        "30 Watt").
+    </div>
+
+    <p><strong>Implementasi Kode:</strong></p>
+    <div class="code-block">
+        <pre>
+def extract_specs(name):
+    # Regex untuk menangkap angka Watt (e.g., 30W, 65 Watt)
+    # \d+ = menangkap angka, [Ww]att = menangkap satuan
+    watts = re.findall(r'(\d+)\s*[Ww]att|(\d+)[Ww]', name, re.IGNORECASE)
+    
+    # Regex untuk menangkap angka Ampere (e.g., 2.4A, 3 Amp)
+    amps = re.findall(r'(\d+\.?\d*)\s*[Aa]mp|(\d+\.?\d*)[Aa]', name, re.IGNORECASE)
+    
+    # Logika pemilihan nilai (mengambil match pertama yang valid)
+    watt_str = f"{next((x for x in watts[0] if x), '')}W" if watts else ""
+    amp_str = f"{next((x for x in amps[0] if x), '')}A" if amps else ""
+            
+    return watt_str, amp_str
+</pre>
+    </div>
+
+    <h3>B. Identifikasi & Klasifikasi Brand</h3>
+
+    <div class="rationale-box">
+        <span class="rationale-title">Landasan Pemilihan Teknik (Rationale):</span>
+        Sistem menggunakan metode <em>Dictionary-based Lookup</em> (Pencocokan Kamus). Teknik ini dipilih karena entitas
+        brand dalam domain aksesoris mobil bersifat terbatas (*finite set*). Pendekatan ini memberikan kinerja komputasi
+        yang sangat cepat (O(1) complexity) dibandingkan model Machine Learning NER (*Named Entity Recognition*) yang
+        berlebihan untuk kasus ini.
+    </div>
+
+    <p><strong>Implementasi Kode:</strong></p>
+    <div class="code-block">
+        <pre>
+def clean_brand_name(name):
+    # Knowledge Base: Daftar Brand Valid
+    brands = ['Baseus', 'Anker', 'Aukey', 'ACMIC', 'Xiaomi', 'Samsung', 'Vivan']
+    
+    # Pencocokan string case-insensitive
+    name_lower = name.lower()
+    for brand in brands:
+        if brand.lower() in name_lower:
+            return brand 
+            
+    return "Generic" # Klasifikasi default
+</pre>
+    </div>
+
+    <h3>C. Semantic Title Reconstruction (Optimasi Judul)</h3>
+
+    <div class="rationale-box">
+        <span class="rationale-title">Landasan Pemilihan Teknik (Rationale):</span>
+        Judul asli marketplace seringkali mengandung "Keyword Spamming" untuk SEO. Untuk keperluan visualisasi Dashboard
+        Admin, judul harus dibersihkan. Kami menggunakan teknik <em>Template Construction</em> untuk menyusun ulang
+        judul yang semantik dan seragam.
+    </div>
+
+    <p><strong>Implementasi Kode:</strong></p>
+    <div class="code-block">
+        <pre>
+def generate_title(row):
+    # 1. Ekstraksi Fitur Bersih
+    brand = clean_brand_name(row['name'])
+    watt, amp = extract_specs(row['name'])
+    
+    # 2. Penentuan Core Keyword berdasarkan Kategori
+    if row['category'] == 'Car Charger Adapter':
+        keywords = "Car Charger Mobil Fast Charging"
+    elif row['category'] == 'Kabel Data':
+        keywords = "Kabel Data Charger"
+    
+    # 3. Konstruksi Judul Baru: [Brand] + [Keyword] + [Specs]
+    specs = watt if watt else amp
+    new_title = f"{brand} {keywords} {specs}"
+    
+    return new_title.strip()
+</pre>
+    </div>
+
+    <h2>2. Kesimpulan Implementasi</h2>
+    <p>Penerapan skrip Python ini berhasil mentransformasi data mentah yang tidak terstruktur menjadi dataset
+        <code>optimized_titles.csv</code> yang bersih. Hal ini menjadi fondasi utama bagi akurasi visualisasi data pada
+        sistem Dashboard.</p>
+
+</body>
+
+</html>

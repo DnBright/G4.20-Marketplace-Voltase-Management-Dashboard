@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: 'Times New Roman', serif;
+            line-height: 1.6;
+            margin: 2cm;
+        }
+
+        h1 {
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 16pt;
+            margin-bottom: 30pt;
+            font-weight: bold;
+        }
+
+        h2 {
+            font-size: 14pt;
+            border-bottom: 2px solid #333;
+            margin-top: 20pt;
+            font-weight: bold;
+        }
+
+        h3 {
+            font-size: 12pt;
+            margin-top: 15pt;
+            font-weight: bold;
+        }
+
+        h4 {
+            font-size: 12pt;
+            margin-top: 10pt;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        p,
+        li {
+            font-size: 12pt;
+            text-align: justify;
+        }
+
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ddd;
+            font-family: Courier, monospace;
+            font-size: 10pt;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        code {
+            font-family: Courier, monospace;
+            background: #eee;
+            padding: 2px 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10pt 0;
+        }
+
+        th,
+        td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 10pt;
+            margin-top: 50pt;
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid #000;
+            margin: 20pt 0;
+        }
+
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+    </style>
+    <title>Laporan Project - Pemrosesan Visual Data</title>
+</head>
+
+<body>
+    <h1>LAPORAN PROJECT: PEMROSESAN VISUAL DATA</h1>
+    <p style="text-align: center; font-weight: bold;">
+        OPTIMALISASI STRATEGI PENJUALAN DENGAN SISTEM REKOMENDASI & ANALISIS PASAR INTERAKTIF MENGGUNAKAN METODE
+        USER-BASED COLLABORATIVE FILTERING
+    </p>
+    <hr>
+
+    <h2>A. Pendahuluan</h2>
+
+    <h3>Latar Belakang Pemilihan Dataset</h3>
+    <p>Pemilihan dataset dalam project ini didasarkan pada urgensi pemahaman dinamika pasar e-commerce di Indonesia yang
+        sangat fluktuatif. Dataset yang digunakan merupakan data primer hasil akuisisi teknik <i>Web Scraping</i> dari
+        platform marketplace (Tokopedia/Shopee). Data ini telah melalui proses filtering yang ketat dan disimpan dalam
+        format <code>filtered_products.csv</code>.</p>
+    <p>Dataset ini dipilih karena mengandung variabel multidimensi yang krusial untuk mata kuliah Pemrosesan Visual
+        Data, yaitu: kategori produk, harga, rating, jumlah ulasan, dan lokasi geografis (kota). Dengan memanfaatkan
+        data ini, kita dapat mensimulasikan skenario nyata bagaimana sebuah sistem cerdas (AI) dapat membantu pelaku
+        bisnis melakukan intervensi strategis berdasarkan pola perilaku konsumen, bukan sekadar intuisi.</p>
+
+    <h3>Knowledge/Information/Insight yang akan Disajikan</h3>
+    <p>Project ini mentransformasi data mentah tersebut menjadi seperangkat wawasan strategis (*Actionable Insights*):
+    </p>
+    <ul>
+        <li><b>AI Market Trend</b>: Identifikasi produk dengan potensi penjualan tertinggi berdasarkan perhitungan
+            algoritmik <i>Collaborative Filtering</i>.</li>
+        <li><b>Growth Dynamics</b>: Visualisasi tren pendapatan bulanan untuk analisis stabilitas arus kas bisnis.</li>
+        <li><b>Sector Analysis</b>: Pemetaan dominasi kategori produk untuk menentukan fokus inventaris.</li>
+        <li><b>Geographic Pulse</b>: Analisis persebaran demografis pembeli berdasarkan kota untuk strategi logistik.
+        </li>
+    </ul>
+
+    <h2>B. Tujuan</h2>
+    <p>Tujuan utama dari implementasi pemrosesan dan visualisasi data dalam project ini adalah:</p>
+    <ol>
+        <li><b>Akurasi Prediksi</b>: Mengimplementasikan algoritma kemiripan kosinus (<i>Cosine Similarity</i>) untuk
+            membangun sistem rekomendasi yang mampu memprediksi minat pengguna secara personal.</li>
+        <li><b>Efisiensi Manajerial</b>: Menghadirkan dashboard 'Command Center' yang interaktif bagi administrator
+            untuk memantau KPI (Key Performance Indicators) secara real-time.</li>
+        <li><b>Komunikasi Data Visual</b>: Menerapkan prinsip desain antarmuka modern (Glassmorphism) dan grafik dinamis
+            (Chart.js) untuk mempermudah interpretasi data yang kompleks menjadi keputusan bisnis yang cepat.</li>
+    </ol>
+
+    <h2>C. Batasan</h2>
+    <p>Lingkup pengerjaan dan batasan dataset dalam project ini meliputi:</p>
+    <ul>
+        <li><b>Dataset</b>: Terbatas pada 600+ data produk aksesoris mobil hasil scraping periode berjalan.</li>
+        <li><b>Variabel Data</b>: Fokus pada atribut Nama Produk, Harga, Kategori, Rating, dan Kota Asal Toko.</li>
+        <li><b>Limitasi Teknis</b>: Informasi deskripsi produk yang terlalu panjang dan data gambar resolusi tinggi
+            tidak disertakan untuk optimalisasi performa sistem.</li>
+        <li><b>Timeline</b>: Simulasi data transaksi dibatasi pada rentang waktu 6 bulan terakhir.</li>
+    </ul>
+
+    <h2>D. Metode/Teknik yang Digunakan</h2>
+    <p>Bagian ini menguraikan secara teknis alur kerja sistem, dimulai dari akuisisi data mentah hingga transformasi
+        menjadi data visual yang bermakna.</p>
+
+    <h3>1. Perolehan Data (Data Acquisition)</h3>
+    <p>Data diperoleh langsung dari sumbernya di marketplace melalui dua tahapan teknik otomasi:</p>
+
+    <h4>A. Crawling (Navigasi Dataset)</h4>
+    <p>Proses <b>Crawling</b> dilakukan untuk menavigasi struktur halaman kategori (misal: Aksesoris Mobil) secara
+        otomatis. Sistem menyisir halaman demi halaman (pagination) untuk mengumpulkan URL unik setiap produk yang
+        memenuhi kriteria awal (seperti filter rating > 4.0).</p>
+
+    <h4>B. Scraping (Ekstraksi Data)</h4>
+    <p>Setelah mendapatkan daftar URL, proses <b>Scraping</b> dijalankan untuk mengekstraksi elemen data spesifik dari
+        setiap halaman detail produk. Atribut yang diambil meliputi nama produk, harga, lokasi toko, dan metrik kepuasan
+        pelanggan.</p>
+
+    <h3>2. Pra-pemrosesan Data & Filtering Cerdas (Python Processing)</h3>
+    <p>Data mentah dari scraping seringkali mengandung *noise* (kata kunci spam pada judul). Tahap ini menggunakan
+        script <b>Python</b> untuk membersihkan dan memperkaya dataset.</p>
+
+    <h4>A. Ekstraksi Spesifikasi via Regex</h4>
+    <p>Teknik <b>Regular Expression (Regex)</b> digunakan untuk "membaca" spesifikasi teknis yang tertanam dalam teks
+        judul secara otomatis.</p>
+    <pre>
+# Cuplikan Kode Python: Ekstraksi Watt & Ampere
+def extract_specs(name):
+    # Regex untuk menangkap angka Watt (e.g., 30W, 65 Watt)
+    watts = re.findall(r'(\d+)\s*[Ww]att|(\d+)[Ww]', name, re.IGNORECASE)
+    
+    # Regex untuk menangkap angka Ampere (e.g., 2.4A, 3 Amp)
+    amps = re.findall(r'(\d+\.?\d*)\s*[Aa]mp|(\d+\.?\d*)[Aa]', name, re.IGNORECASE)
+    
+    return watts, amps
+    </pre>
+    <p><i>Analisis:</i> Dengan teknik ini, sistem dapat mengelompokkan produk berdasarkan kapasitas dayanya (misal:
+        Charger 30W vs 65W), sebuah fitur yang tidak disediakan oleh data mentah marketplace.</p>
+
+    <h4>B. Identifikasi Brand & Klasifikasi</h4>
+    <p>Sistem melakukan pencocokan kata kunci (*keyword matching*) terhadap daftar brand ternama (seperti Baseus, Anker,
+        Xiaomi) untuk memisahkan nama produsen dari deskripsi produk. Hal ini penting untuk analisis pangsa pasar per
+        brand.</p>
+
+    <h4>C. Semantic Title Optimization (Rekonstruksi Judul)</h4>
+    <p>Filtering terakhir adalah menyusun ulang judul produk menjadi format standar yang bersih, menggunakan formula:
+        <code>[Brand] + [Core Keyword] + [Specs]</code>.</p>
+    <pre>
+def generate_title(row):
+    # Logika penyusunan judul baru yang bersih
+    brand = clean_brand_name(row['name'])
+    watt, amp = extract_specs(row['name'])
+    
+    # Mapping keyword inti berdasarkan kategori
+    if row['category'] == 'Car Charger':
+        keywords = "Car Charger Fast Charging"
+    
+    return f"{brand} {keywords} {watt if watt else amp}"
+    </pre>
+
+    <h3>3. Diagram Alur Kerja (Flowchart)</h3>
+    <p>Berikut adalah representasi visual alur sistem dari hulu ke hilir:</p>
+    <!-- Silakan insert diagram Mermaid/Draw.io di sini pada dokumen Word -->
+    <div style="border:1px dashed #000; padding:10px; text-align:center; background:#f9f9f9;">
+        [TEMPAT UNTUK MENEMPEL DIAGRAM FLOWCHART DARI MERMAID/DRAW.IO]
+    </div>
+
+    <h2>E. Hasil dan Analisis</h2>
+
+    <h3>1. Analisis Algoritma Rekomendasi (Collaborative Filtering)</h3>
+    <p>Sistem ini menerapkan algoritma <i>User-Based Collaborative Filtering</i> untuk memprediksi produk diminati.</p>
+    <pre>
+// Cuplikan Logika PHP (RecommendationService.php)
+private function calculateCosineSimilarity($u1, $u2) {
+    // Menghitung kemiripan pola belanja antar user
+    $dotProduct = 0; $norm1 = 0; $norm2 = 0;
+    // ... kalkulasi vektor ...
+    return $dotProduct / ($denominator);
+}
+    </pre>
+    <p><b>Analisis:</b> Hasil perhitungan <i>Similarity Score</i> menunjukkan bahwa algoritma ini efektif dalam
+        memberikan rekomendasi silang (*cross-selling*). Produk yang dibeli oleh user dengan profil serupa (User A dan
+        User B) memiliki probabilitas konversi yang lebih tinggi.</p>
+
+    <h3>2. Visualisasi Dashboard (Chart.js)</h3>
+    <p>Data hasil olahan ditampilkan dalam dashboard bertema <i>Command Center</i>.</p>
+    <ul>
+        <li><b>Line Chart</b>: Digunakan untuk memvisualisasikan tren pendapatan. Efek gradien pada grafik membantu
+            admin melihat puncak (*peak*) dan lembah (*trough*) penjualan dengan cepat.</li>
+        <li><b>Polar Area Chart</b>: Dipilih untuk menampilkan distribusi kota asal pembeli. Grafik ini memberikan
+            perspektif visual yang lebih menarik dibanding Bar Chart standar untuk membandingkan jangkauan area.</li>
+    </ul>
+
+    <h2>F. Kesimpulan</h2>
+    <p>Berdasarkan implementasi dan pengujian sistem, dapat disimpulkan:</p>
+    <ol>
+        <li>Integrasi teknik <b>Scraping</b> dan <b>Filtering Python</b> terbukti mampu meningkatkan kualitas data input
+            secara signifikan, mengubah data tekstual mentah menjadi atribut terukur (Watt/Ampere).</li>
+        <li>Algoritma <b>Collaborative Filtering</b> berhasil memberikan dimensi baru pada analisis pasar, memungkinkan
+            identifikasi produk 'Hidden Gem' yang secara statistik diminati namun belum tentu memiliki volume penjualan
+            tertinggi.</li>
+        <li>Pendekatan <b>Visual Data Processing</b> melalui dashboard interaktif memberikan efisiensi waktu bagi
+            pengambil keputusan untuk memahami kondisi pasar secara komprehensif dalam satu tampilan layar.</li>
+    </ol>
+
+    <h2>G. References</h2>
+    <p>[1] J. S. Breese, D. Heckerman, and C. Kadie, "Empirical analysis of predictive algorithms for collaborative
+        filtering," in <i>Proc. 14th Conf. Uncertainty in Artificial Intelligence (UAI-98)</i>, 1998.</p>
+    <p>[2] V. Geroimenko and C. Chen, <i>Visualizing the Semantic Web: XML-based Internet and Information
+            Visualization</i>. London: Springer-Verlag, 2002.</p>
+    <p>[3] Chart.js Documentation, "Chart.js 3.x Migration Guide," Available: https://www.chartjs.org/.</p>
+    <p>[4] Laravel Documentation, "Eloquent ORM & Database Seeding," Available: https://laravel.com/.</p>
+
+    <div class="footer">
+        <i>Dokumen ini diformat otomatis untuk kemudahan ekspor ke Microsoft Word.</i>
+    </div>
+</body>
+
+</html>
