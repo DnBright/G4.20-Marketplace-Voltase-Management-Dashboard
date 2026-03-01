@@ -8,4 +8,22 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    
+    --color-brand-green: #75B06F;
+    --color-brand-lime: #E0FF00;
+    --color-brand-orange: #FF3E00;
+    --color-street-black: #0a0a0a;
+    --color-street-grey: #1c1c1c;
+
+    --font-bebas: '"Bebas Neue"', cursive;
+    --font-stencil: '"Russo One"', sans-serif;
+}
+
+@utility bg-grain {
+    background-image: url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
+    opacity: 0.05;
+}
+
+@utility text-glow {
+    text-shadow: 0 0 10px var(--color-brand-green);
 }
